@@ -1,0 +1,28 @@
+# Add a second site block to /etc/caddy/Caddyfile on the Oracle VPS
+# (the existing scheduler-prod.duckdns.org block stays as-is)
+#
+# Option A: separate subdomain (recommended)
+#   Requires: add an A record  slack.scheduler-prod.duckdns.org → 92.5.37.69
+#   (DuckDNS doesn't support sub-subdomains — use a different free domain
+#    like sp-slack.duckdns.org and point it to the same IP)
+
+sp-slack.duckdns.org {
+    reverse_proxy localhost:3000
+}
+
+# Option B: path-based on the same domain (no extra DNS needed)
+# Uncomment and merge into the existing scheduler-prod.duckdns.org block:
+#
+# scheduler-prod.duckdns.org {
+#     handle /login*       { reverse_proxy localhost:3000 }
+#     handle /app*         { reverse_proxy localhost:3000 }
+#     handle /webhook*     { reverse_proxy localhost:3000 }
+#     handle /slack*       { reverse_proxy localhost:3000 }
+#     handle /uninstall*   { reverse_proxy localhost:3000 }
+#     handle /health       { reverse_proxy localhost:3000 }
+#     handle /api/app*     { reverse_proxy localhost:3000 }
+#     handle              { reverse_proxy localhost:8080 }   # existing scheduler
+# }
+
+# After editing, reload Caddy:
+#   sudo systemctl reload caddy
