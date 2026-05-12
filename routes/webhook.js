@@ -2,6 +2,7 @@ const express = require('express');
 const router  = express.Router();
 const db      = require('../db/database');
 const { sendToSlack } = require('../services/slack');
+const { getPopupById } = require('../services/sp');
 
 // SP posts URL-encoded lead data here
 router.post('/webhook/:token', express.urlencoded({ extended: true }), async (req, res) => {
@@ -30,15 +31,57 @@ async function processLead(token, payload) {
     return;
   }
 
-  // SP sends variables as variables[N][name] / variables[N][value] pairs
-  // Flatten them into a simple key→value map and merge with top-level fields
-  const flat = flattenVariables(payload);
+  const flat    = flattenVariables(payload);
+  // SP sends camelCase popupId, not snake_case popup_id
+  const popupId = flat.popupId || flat.popup_id || null;
+  console.log('[webhook] popupId:', JSON.stringify(popupId));
+
+  // Try to resolve the popup name from SP API (best-effort, falls back to null)
+  const userId = db.prepare('SELECT id FROM users WHERE sp_user_id = ?').get(config.sp_user_id)?.id;
+  let popupName = flat.popup_name || null;
+  if (popupId && userId && !popupName) {
+    const popup = await getPopupById(userId, popupId);
+    if (popup?.name) {
+      popupName = popup.name;
+      console.log('[webhook] resolved popup name:', popupName);
+      // Cache the name in popup_routes if a route exists for this popup
+      db.prepare(`UPDATE popup_routes SET popup_name = ? WHERE user_id = ? AND popup_id = ? AND (popup_name IS NULL OR popup_name = popup_id)`)
+        .run(popupName, userId, popupId);
+    }
+  }
+
+  // Check if any enabled routing rules exist — if none, forward everything
+  const routeCount = db.prepare(
+    'SELECT COUNT(*) as n FROM popup_routes WHERE user_id = (SELECT id FROM users WHERE sp_user_id = ?) AND enabled = 1'
+  ).get(config.sp_user_id)?.n || 0;
+
+  let targetWebhookUrl = config.slack_webhook_url;
+
+  if (routeCount > 0) {
+    const route = popupId
+      ? db.prepare(`
+          SELECT slack_webhook_url FROM popup_routes
+          WHERE user_id = (SELECT id FROM users WHERE sp_user_id = ?)
+            AND LOWER(TRIM(popup_id)) = LOWER(TRIM(?))
+            AND enabled = 1
+          LIMIT 1
+        `).get(config.sp_user_id, popupId)
+      : null;
+
+    if (!route) {
+      console.log(`[webhook] popupId ${popupId} not in routing rules — dropped`);
+      db.prepare(`INSERT INTO event_log (sp_user_id, popup_id, popup_name, lead_email, lead_name, slack_status, error_msg) VALUES (?, ?, ?, ?, ?, ?, ?)`)
+        .run(config.sp_user_id, popupId, popupName, flat.email || null, flat.name || null, 'dropped', `popup not in routes`);
+      return;
+    }
+    targetWebhookUrl = route.slack_webhook_url;
+  }
 
   let slackStatus = 'ok';
   let errorMsg    = null;
 
   try {
-    await sendToSlack(config.slack_webhook_url, flat);
+    await sendToSlack(targetWebhookUrl, flat);
   } catch (err) {
     slackStatus = 'error';
     errorMsg    = err.message;
@@ -46,9 +89,9 @@ async function processLead(token, payload) {
   }
 
   db.prepare(`
-    INSERT INTO event_log (sp_user_id, lead_email, lead_name, slack_status, error_msg)
-    VALUES (?, ?, ?, ?, ?)
-  `).run(config.sp_user_id, flat.email || null, flat.name || null, slackStatus, errorMsg);
+    INSERT INTO event_log (sp_user_id, popup_id, popup_name, lead_email, lead_name, slack_status, error_msg)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `).run(config.sp_user_id, popupId, popupName, flat.email || null, flat.name || null, slackStatus, errorMsg);
 }
 
 // Merge top-level fields with SP's variables[N][name]/[value] pairs
@@ -68,7 +111,7 @@ function flattenVariables(payload) {
   }
 
   for (const v of Object.values(varMap)) {
-    if (v.name && v.value) result[v.name] = v.value;
+    if (v.name && v.value !== undefined && v.value !== '') result[v.name] = v.value;
   }
 
   return result;

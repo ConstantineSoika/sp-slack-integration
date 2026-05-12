@@ -18,7 +18,9 @@ async function exchangeCode(code) {
   });
 
   if (!res.ok) throw new Error(`SP authorize failed: ${res.status}`);
-  return res.json(); // { client_id, client_secret, user_id }
+  const json = await res.json();
+  const d = json.data ?? json;
+  return { client_id: d.client_id, client_secret: d.client_secret, user_id: String(Math.floor(Number(d.user_id))) };
 }
 
 // Get a Bearer token using client credentials
@@ -59,15 +61,41 @@ async function getBearerForUser(userId) {
   return token;
 }
 
-// Fetch the user's popups list (read-only scope)
+// Fetch all popups for a user — returns [{ id, name }] or []
 async function getPopups(userId) {
-  const token = await getBearerForUser(userId);
-  const res = await fetch(`${SP_API}/pop_ups`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.data || [];
+  try {
+    const token = await getBearerForUser(userId);
+    const res = await fetch(`${SP_API}/v2/pop-ups`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log('[sp] GET /v2/pop-ups status:', res.status);
+    if (!res.ok) { console.log('[sp] body:', await res.text()); return []; }
+    const data = await res.json();
+    const items = data.data ?? data ?? [];
+    return items.map(p => ({ id: String(p.id), name: p.name || p.title || String(p.id) }));
+  } catch (e) {
+    console.error('[sp] getPopups error:', e.message);
+    return [];
+  }
 }
 
-module.exports = { exchangeCode, fetchBearer, getBearerForUser, getPopups };
+// Fetch a single popup by ID — returns { id, name } or null
+async function getPopupById(userId, popupId) {
+  try {
+    const token = await getBearerForUser(userId);
+    const res = await fetch(`${SP_API}/v2/pop-ups/${encodeURIComponent(popupId)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log('[sp] GET /v2/pop-ups/' + popupId + ' status:', res.status);
+    if (!res.ok) return null;
+    const data = await res.json();
+    const d = data.data ?? data;
+    if (!d || (!d.name && !d.title)) return null;
+    return { id: String(d.id || popupId), name: d.name || d.title };
+  } catch (e) {
+    console.error('[sp] getPopupById error:', e.message);
+    return null;
+  }
+}
+
+module.exports = { exchangeCode, fetchBearer, getBearerForUser, getPopups, getPopupById };

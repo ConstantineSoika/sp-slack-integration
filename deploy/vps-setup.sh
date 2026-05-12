@@ -6,7 +6,9 @@ set -e
 APP_DIR=/opt/sp-slack
 DATA_DIR=$APP_DIR/data
 SERVICE=sp-slack
-GH_REPO="https://github.com/ConstantineSoika/sp-slack-integration.git"
+# Override REPO_URL env var to use a different remote (e.g. GitLab):
+#   REPO_URL=https://gitlab.com/you/sp-slack.git sudo bash vps-setup.sh
+REPO_URL="${REPO_URL:-https://github.com/ConstantineSoika/sp-slack-integration.git}"
 
 echo "==> Installing Node.js 20 (via NodeSource)..."
 curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
@@ -18,7 +20,7 @@ echo "==> Cloning repo to $APP_DIR..."
 if [ -d "$APP_DIR" ]; then
   cd $APP_DIR && git pull
 else
-  git clone $GH_REPO $APP_DIR
+  git clone $REPO_URL $APP_DIR
 fi
 
 echo "==> Installing npm deps..."

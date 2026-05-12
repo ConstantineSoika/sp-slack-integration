@@ -10,95 +10,96 @@
 
 <div class="app-header">
   <h1>SP Popups × Slack</h1>
-  <span id="status-badge" class="badge disconnected">Not connected</span>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button id="theme-toggle" class="btn-theme" title="Toggle light/dark theme">☀</button>
+    <span id="status-badge" class="badge badge-disconnected">Not connected</span>
+  </div>
 </div>
 
 <div id="flash-area"></div>
 
-<!-- NOT CONNECTED STATE -->
-<div id="section-connect" class="card" style="display:none">
-  <h2>Connect your Slack workspace</h2>
-  <p style="margin-bottom:14px">
-    After connecting, every new lead from your SendPulse popups will be posted to your chosen Slack channel in real time.
-  </p>
-  <a id="connect-btn" href="/slack/connect" class="btn btn-slack">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M6 15a3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3h3v3zm1.5 0a3 3 0 0 1 3-3 3 3 0 0 1 3 3v7.5a3 3 0 0 1-3 3 3 3 0 0 1-3-3V15zm3-9a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3v3h-3zM9 7.5a3 3 0 0 1 3 3 3 3 0 0 1-3 3H1.5a3 3 0 0 1-3-3 3 3 0 0 1 3-3H9zm9 3a3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3h-3v-3zm-1.5 0a3 3 0 0 1-3 3 3 3 0 0 1-3-3V3a3 3 0 0 1 3-3 3 3 0 0 1 3 3v7.5zm-3 9a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3v-3h3zm1.5-1.5a3 3 0 0 1-3-3 3 3 0 0 1 3-3h7.5a3 3 0 0 1 3 3 3 3 0 0 1-3 3H15z"/></svg>
-    Add to Slack
-  </a>
-</div>
-
-<!-- CONNECTED STATE -->
-<div id="section-connected" style="display:none">
-
-  <!-- Status card -->
-  <div class="card">
-    <h2>Connected to Slack</h2>
-    <p id="channel-line" style="margin-bottom:14px;font-size:13px;color:#333"></p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button id="test-btn" class="btn btn-ghost btn-sm">Send test lead →</button>
-      <button id="disconnect-btn" class="btn btn-danger btn-sm">Disconnect Slack</button>
-    </div>
-  </div>
-
-  <!-- Webhook URL card -->
-  <div class="card">
-    <h2>Your SendPulse webhook URL</h2>
-    <p>Paste this URL once into your SP popup settings (Settings → Integrations → Add Webhook URL).</p>
-    <div class="copy-box">
-      <code id="webhook-url-text">loading…</code>
-      <button class="copy-btn" id="copy-btn">Copy</button>
-    </div>
-    <p style="margin-top:10px;font-size:12px;color:#888">
-      <a href="https://help.sendpulse.com/en/pop-ups/integrations" target="_blank" style="color:#1A56A4">
-        Where to paste it in SP →
-      </a>
-    </p>
-  </div>
-
-  <!-- Setup instructions -->
-  <div class="card">
-    <h2>3 steps to receive leads in Slack</h2>
-    <ol class="steps">
-      <li>In your SendPulse account, open the popup you want to track.</li>
-      <li>Go to <strong>Settings → Integrations</strong>, click <strong>+ Add Webhook URL</strong>.</li>
-      <li>Paste the URL above, tick <strong>"Send lead creation data"</strong>, and save. Done!</li>
-    </ol>
-  </div>
-
-  <!-- Slack message preview -->
-  <div class="card">
-    <h2>Preview — what your team will see in Slack</h2>
-    <div class="slack-preview">
-      <div class="sp-header">🔔 New lead from SendPulse popup</div>
-      <div class="sp-field">
-        <div class="sp-kv"><strong>Name</strong>Jane Smith</div>
-        <div class="sp-kv"><strong>Email</strong>jane@example.com</div>
-        <div class="sp-kv"><strong>Phone</strong>+1 555 123 4567</div>
-        <div class="sp-kv"><strong>Popup</strong>Exit Intent — Promo</div>
-      </div>
-      <div style="font-size:11px;color:#888;margin-top:6px">via <strong>SP Popups × Slack</strong> · today at 14:30</div>
-    </div>
-  </div>
-
-  <!-- Connected popups list -->
-  <div class="card" id="popups-card" style="display:none">
-    <h2>Your active popups</h2>
-    <ul class="popup-list" id="popups-list"></ul>
-    <p style="font-size:11px;color:#888;margin-top:8px">All popups that have the webhook URL set will automatically send leads to Slack.</p>
-  </div>
-
-  <!-- Recent events -->
-  <div class="card">
-    <h2>Recent leads received</h2>
-    <div id="events-area">
-      <p style="color:#888;font-size:13px">No leads yet. Send a test above or wait for the first real submission.</p>
-    </div>
-  </div>
-
-</div>
-
+<!-- LOADING -->
 <div id="section-loading" class="card" style="text-align:center;padding:40px">
   <span class="spinner"></span>
+</div>
+
+<!-- NOT CONNECTED -->
+<div id="section-connect" style="display:none">
+  <div class="card">
+    <h2>Connect Slack</h2>
+    <p style="margin-bottom:14px">Every new lead from your SendPulse popups will be posted to your Slack channel in real time.</p>
+    <a id="connect-btn" href="/slack/connect" target="_blank" class="btn btn-slack">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M6 15a3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3h3v3zm1.5 0a3 3 0 0 1 3-3 3 3 0 0 1 3 3v7.5a3 3 0 0 1-3 3 3 3 0 0 1-3-3V15zm3-9a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3v3h-3zM9 7.5a3 3 0 0 1 3 3 3 3 0 0 1-3 3H1.5a3 3 0 0 1-3-3 3 3 0 0 1 3-3H9zm9 3a3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3h-3v-3zm-1.5 0a3 3 0 0 1-3 3 3 3 0 0 1-3-3V3a3 3 0 0 1 3-3 3 3 0 0 1 3 3v7.5zm-3 9a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3v-3h3zm1.5-1.5a3 3 0 0 1-3-3 3 3 0 0 1 3-3h7.5a3 3 0 0 1 3 3 3 3 0 0 1-3 3H15z"/></svg>
+      Add to Slack
+    </a>
+  </div>
+</div>
+
+<!-- CONNECTED -->
+<div id="section-connected" style="display:none">
+
+  <!-- Settings accordion (top) -->
+  <div class="card">
+    <div class="accordion-hd" id="settings-hd">
+      <h2>Settings</h2>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-bd" id="settings-bd">
+      <div class="inner">
+
+        <!-- Webhook URL -->
+        <h2 style="margin-bottom:6px">Your Webhook URL</h2>
+        <p style="margin-bottom:8px">Paste this into <strong>SP popup → Settings → Integrations → Add Webhook URL</strong>, then tick <strong>"Send lead creation data"</strong>.</p>
+        <div class="copy-box">
+          <code id="webhook-url-text">loading…</code>
+          <button class="copy-btn" id="copy-btn">Copy</button>
+        </div>
+
+        <div class="row" style="margin-top:16px;margin-bottom:6px">
+          <button id="test-btn" class="btn btn-ghost btn-sm">Send test lead</button>
+          <button id="disconnect-btn" class="btn btn-danger btn-sm">Disconnect Slack</button>
+        </div>
+        <p id="channel-line" style="font-size:12px;margin-bottom:0"></p>
+
+        <!-- Slack message preview -->
+        <h2 style="margin-top:16px;margin-bottom:8px">Slack message preview</h2>
+        <div class="slack-preview">
+          <div class="sp-hd">🔔 New lead from SendPulse popup</div>
+          <div class="sp-fields">
+            <div class="sp-kv"><strong>Name</strong>Jane Smith</div>
+            <div class="sp-kv"><strong>Email</strong>jane@example.com</div>
+            <div class="sp-kv"><strong>Phone</strong>+1 555 123 4567</div>
+            <div class="sp-kv"><strong>Popup</strong>Exit Intent — Promo</div>
+          </div>
+          <div class="sp-meta">via <strong>SP Popups × Slack</strong> · today at 14:30</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup routing -->
+  <div class="card" id="routing-card">
+    <h2>Popup routing</h2>
+    <div id="routing-note" class="route-status-note all">Forwarding all leads to Slack (no routing set)</div>
+    <div id="routing-list"><p class="empty">Loading your popups…</p></div>
+    <p class="mt8 empty" style="font-size:11px">Toggle a popup ON to route only selected popups. Others will be ignored.</p>
+    <div class="mt8" id="channels-area"></div>
+  </div>
+
+  <!-- Recent leads accordion (collapsed by default) -->
+  <div class="card">
+    <div class="accordion-hd" id="leads-hd">
+      <h2>Recent leads</h2>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-bd" id="leads-bd">
+      <div class="inner" id="events-area">
+        <p class="empty">No leads yet — send a test or wait for the first submission.</p>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script src="/app.js"></script>

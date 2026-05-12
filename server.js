@@ -18,12 +18,14 @@ app.set('trust proxy', 1);
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Static frontend files
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve the iframe app at /app
 app.get('/app', (req, res) => {
+  if (Object.keys(req.query).length) console.log('[app] query:', JSON.stringify(req.query));
   res.sendFile(path.join(__dirname, 'public', 'app.html'));
 });
 

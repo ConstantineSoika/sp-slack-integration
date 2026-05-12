@@ -1,22 +1,24 @@
 // Format a SendPulse webhook payload into a Slack Block Kit message and send it
 function buildBlocks(payload) {
-  const name  = payload.name  || payload['variables[name]']  || '—';
-  const email = payload.email || payload['variables[email]'] || '—';
+  const name  = payload.name  || payload['variables[name]']  || null;
+  const email = payload.email || payload['variables[email]'] || null;
   const phone = payload.phone || payload['variables[phone]'] || null;
 
-  // Collect any extra custom variables SP might send
+  const SKIP = new Set(['name', 'email', 'phone', 'popup_id', 'popup_name', 'referrer']);
+
+  // Collect extra custom variables — only those with non-empty values
   const extra = [];
   for (const [key, val] of Object.entries(payload)) {
-    if (['name', 'email', 'phone', 'popup_id', 'popup_name', 'referrer'].includes(key)) continue;
-    if (!val || key.startsWith('variables[')) continue;
+    if (SKIP.has(key)) continue;
+    if (key.startsWith('variables[')) continue;
+    if (val === '' || val === null || val === undefined) continue;
     extra.push({ type: 'mrkdwn', text: `*${key}:*\n${val}` });
   }
 
-  const fields = [
-    { type: 'mrkdwn', text: `*Name:*\n${name}` },
-    { type: 'mrkdwn', text: `*Email:*\n${email}` },
-  ];
-  if (phone) fields.push({ type: 'mrkdwn', text: `*Phone:*\n${phone}` });
+  const fields = [];
+  if (name)              fields.push({ type: 'mrkdwn', text: `*Name:*\n${name}` });
+  if (email)             fields.push({ type: 'mrkdwn', text: `*Email:*\n${email}` });
+  if (phone)             fields.push({ type: 'mrkdwn', text: `*Phone:*\n${phone}` });
   if (payload.popup_name) fields.push({ type: 'mrkdwn', text: `*Popup:*\n${payload.popup_name}` });
   if (extra.length) fields.push(...extra.slice(0, 4)); // Block Kit max 10 fields per section
 
@@ -56,7 +58,7 @@ function buildBlocks(payload) {
       {
         type: 'button',
         text:  { type: 'plain_text', text: 'Open SendPulse CRM', emoji: true },
-        url:   'https://login.sendpulse.com/deals/list',
+        url:   'https://login.sendpulse.com/crm/contacts',
         style: 'primary',
       },
     ],
