@@ -39,6 +39,9 @@ app.use(appRoutes);
 // Health check
 app.get('/health', (_, res) => res.json({ ok: true }));
 
+// Root — redirect to app
+app.get('/', (_, res) => res.redirect('/app'));
+
 app.listen(PORT, () => {
   console.log(`SP × Slack running on port ${PORT}`);
   console.log(`Base URL: ${process.env.BASE_URL || `http://localhost:${PORT}`}`);
