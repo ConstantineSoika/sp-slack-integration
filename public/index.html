@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SendPulse Popups → Slack</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #009FC1;
+      --slack:   #4A154B;
+      --bg:      #0d181c;
+      --card:    #132229;
+      --border:  #1d363f;
+      --text:    #D6E3E3;
+      --muted:   #6B8E99;
+      --radius:  10px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .logo-sp   { background: var(--primary); }
+    .logo-slack { background: var(--slack); }
+
+    .arrow {
+      font-size: 20px;
+      color: var(--muted);
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 10px;
+      letter-spacing: -.3px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      text-align: center;
+      max-width: 440px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      max-width: 600px;
+      width: 100%;
+      margin-bottom: 40px;
+    }
+
+    .feature {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 16px;
+    }
+
+    .feature-icon {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .feature h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .feature p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 11px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-bottom: 40px;
+      transition: opacity .15s;
+    }
+    .cta:hover { opacity: .88; }
+
+    footer {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: underline; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <div class="logo-row">
+    <div class="logo logo-sp">📨</div>
+    <span class="arrow">→</span>
+    <div class="logo logo-slack">💬</div>
+  </div>
+
+  <h1>SendPulse Popups → Slack</h1>
+  <p class="subtitle">Get real-time Slack notifications for every lead captured by your SendPulse popup forms. Route different popups to different channels.</p>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">⚡</div>
+      <h3>Instant notifications</h3>
+      <p>Leads land in Slack the moment a visitor submits a popup form.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🎯</div>
+      <h3>Per-popup routing</h3>
+      <p>Send each popup's leads to a different Slack channel.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔌</div>
+      <h3>One-click setup</h3>
+      <p>Connect your Slack workspace in seconds — no code required.</p>
+    </div>
+  </div>
+
+  <a class="cta" href="https://login.sendpulse.com/en/apps/">
+    Install from SendPulse Marketplace →
+  </a>
+
+  <footer>
+    <a href="/privacy.html">Privacy Policy</a>
+  </footer>
+
+</body>
+</html>
