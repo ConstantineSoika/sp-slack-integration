@@ -2,43 +2,150 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Privacy Policy — SP Popups × Slack</title>
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body style="max-width:640px;margin:40px auto">
-  <h1 style="margin-bottom:8px">SP Popups × Slack</h1>
-  <h2 style="font-size:15px;color:#666;font-weight:400;margin-bottom:24px">Privacy Policy</h2>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — SendPulse Popups → Slack</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <div class="card">
-    <h2>What we collect</h2>
-    <p style="margin-top:8px">We collect only the data required to deliver the service:</p>
-    <ul style="margin:10px 0 0 18px;font-size:13px;color:#444;line-height:1.8">
-      <li>Your SendPulse user ID (to identify your account)</li>
-      <li>Your Slack incoming webhook URL and channel name (to deliver notifications)</li>
-      <li>A log of received leads: email address and name, plus delivery status</li>
+    :root {
+      --primary: #009FC1;
+      --bg:      #0d181c;
+      --card:    #132229;
+      --border:  #1d363f;
+      --text:    #D6E3E3;
+      --muted:   #6B8E99;
+      --radius:  10px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 48px 16px 64px;
+    }
+
+    .wrap {
+      max-width: 660px;
+      margin: 0 auto;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      margin-bottom: 32px;
+    }
+    .back:hover { color: var(--text); }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin-bottom: 12px;
+    }
+
+    .section h2 {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 12px;
+    }
+
+    .section p, .section li {
+      font-size: 13px;
+      color: #a8c0c8;
+      line-height: 1.7;
+    }
+
+    .section ul {
+      padding-left: 18px;
+    }
+
+    .section li + li {
+      margin-top: 4px;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="/">← Back</a>
+
+  <h1>Privacy Policy</h1>
+  <p class="meta">SendPulse Popups → Slack &nbsp;·&nbsp; Last updated: May 2025</p>
+
+  <div class="section">
+    <h2>Who we are</h2>
+    <p>This application ("SendPulse Popups → Slack") forwards lead submissions from SendPulse popup forms to Slack channels. It is an independent integration and is not affiliated with SendPulse or Slack Technologies.</p>
+  </div>
+
+  <div class="section">
+    <h2>Data we collect</h2>
+    <p>We collect only the minimum data required to deliver the service:</p>
+    <ul style="margin-top:10px">
+      <li>Your <strong>SendPulse user ID</strong> and OAuth credentials — to authenticate with the SendPulse API.</li>
+      <li>Your <strong>Slack incoming webhook URL</strong> and channel name — to deliver notifications to your workspace.</li>
+      <li><strong>Lead submissions</strong> received from your popup forms: visitor name, email address, and any other fields included in the form payload.</li>
+      <li>A <strong>delivery log</strong> per lead: timestamp, popup ID, and whether the Slack notification was delivered successfully.</li>
     </ul>
   </div>
 
-  <div class="card">
-    <h2>What we don't do</h2>
-    <p style="margin-top:8px;font-size:13px;color:#444">
-      We do not sell, share, or process your data beyond delivering Slack notifications.
-      We do not use cookies beyond a session cookie required for authentication.
-    </p>
+  <div class="section">
+    <h2>How we use your data</h2>
+    <p>All collected data is used exclusively to operate the integration — forwarding lead data from SendPulse to your configured Slack channel. We do not sell, rent, or share your data with third parties. We do not use it for advertising or analytics.</p>
   </div>
 
-  <div class="card">
-    <h2>Data deletion</h2>
-    <p style="margin-top:8px;font-size:13px;color:#444">
-      All data is permanently and automatically deleted the moment you uninstall the app from SendPulse.
-    </p>
+  <div class="section">
+    <h2>Data storage</h2>
+    <p>Data is stored in an encrypted-at-rest SQLite database on a private server located in the EU. Slack webhook URLs and OAuth tokens are stored securely and are never exposed to third parties.</p>
   </div>
 
-  <div class="card">
+  <div class="section">
+    <h2>Cookies</h2>
+    <p>We use a single session cookie to keep you authenticated inside the app. It is an HTTP-only, secure, same-site cookie and is not used for tracking.</p>
+  </div>
+
+  <div class="section">
+    <h2>Data retention and deletion</h2>
+    <p>All data associated with your account — including credentials, webhook configuration, and lead logs — is permanently and automatically deleted the moment you uninstall the app from your SendPulse account. You may also request manual deletion at any time by contacting us.</p>
+  </div>
+
+  <div class="section">
+    <h2>Third-party services</h2>
+    <p>The app communicates with the following external services:</p>
+    <ul style="margin-top:10px">
+      <li><strong>SendPulse API</strong> (api.sendpulse.com) — to exchange OAuth tokens and receive popup events.</li>
+      <li><strong>Slack API</strong> (hooks.slack.com) — to deliver lead notifications to your channel.</li>
+    </ul>
+    <p style="margin-top:10px">Each service is governed by its own privacy policy. We do not share data beyond what is required for these integrations to function.</p>
+  </div>
+
+  <div class="section">
     <h2>Contact</h2>
-    <p style="margin-top:8px;font-size:13px;color:#444">
-      Questions about this policy? Email us at <a href="mailto:support@YOUR_DOMAIN" style="color:#1A56A4">support@YOUR_DOMAIN</a>.
-    </p>
+    <p>Questions or deletion requests? Email us at <a href="mailto:sklaus650@gmail.com">sklaus650@gmail.com</a>.</p>
   </div>
+
+</div>
 </body>
 </html>
