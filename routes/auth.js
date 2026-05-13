@@ -45,5 +45,6 @@ async function handleLogin(req, res) {
 
 router.get('/login', handleLogin);
 router.post('/login', handleLogin);
+router.post('/', handleLogin);
 
 module.exports = router;
