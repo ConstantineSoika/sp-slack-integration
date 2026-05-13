@@ -22,6 +22,7 @@ async function handleLogin(req, res) {
     }
 
     const { token: bearer, expiresAt } = await fetchBearer(client_id, client_secret);
+    console.log('[login] fetchBearer ok, expiresAt:', expiresAt);
 
     db.prepare(`
       INSERT INTO users (sp_user_id, client_id, client_secret, bearer_token, expires_at, theme, lang)
