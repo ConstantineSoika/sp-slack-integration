@@ -47,9 +47,55 @@
     <div class="accordion-bd" id="settings-bd">
       <div class="inner">
 
+        <!-- Setup guide -->
+        <h2 style="margin-bottom:10px">Setup guide</h2>
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="min-width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">1</div>
+            <div>
+              <p style="font-size:13px;color:var(--text);font-weight:600;margin-bottom:2px">Copy your webhook URL</p>
+              <p style="font-size:12px">Copy the unique URL below and keep it handy.</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="min-width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">2</div>
+            <div>
+              <p style="font-size:13px;color:var(--text);font-weight:600;margin-bottom:2px">Add it to each popup you want to track</p>
+              <p style="font-size:12px">In SendPulse, open a popup → <strong>Settings → Integrations → Webhooks → Add webhook URL</strong>. Paste the URL and enable <strong>"Send lead creation data"</strong>. Repeat for every popup you want notifications for.</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="min-width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">3</div>
+            <div>
+              <p style="font-size:13px;color:var(--text);font-weight:600;margin-bottom:2px">Popups appear automatically</p>
+              <p style="font-size:12px">Each popup shows up in the <strong>Popup routing</strong> section the first time a lead arrives from it. You don't need to configure them in advance.</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="min-width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">4</div>
+            <div>
+              <p style="font-size:13px;color:var(--text);font-weight:600;margin-bottom:2px">Route popups to different channels (optional)</p>
+              <p style="font-size:12px">By default all leads go to one channel. Connect additional Slack channels using <strong>"+ Connect another channel"</strong> in the routing section, then assign any popup to any channel from the dropdown next to it.</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <div style="min-width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">5</div>
+            <div>
+              <p style="font-size:13px;color:var(--text);font-weight:600;margin-bottom:2px">Enable or disable individual popups</p>
+              <p style="font-size:12px">Use the toggle next to each popup to control whether its leads are forwarded. When any popup is enabled, only enabled popups send notifications — the rest are silently ignored.</p>
+            </div>
+          </div>
+
+        </div>
+
         <!-- Webhook URL -->
         <h2 style="margin-bottom:6px">Your Webhook URL</h2>
-        <p style="margin-bottom:8px">Paste this into <strong>SP popup → Settings → Integrations → Add Webhook URL</strong>, then tick <strong>"Send lead creation data"</strong>.</p>
         <div class="copy-box">
           <code id="webhook-url-text">loading…</code>
           <button class="copy-btn" id="copy-btn">Copy</button>
